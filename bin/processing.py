@@ -72,3 +72,62 @@ def logfile(message):
 	with open("./logfile.txt", 'a') as log_file:
 		log_file.write("{}\t{}\n".format(time_stamp, message))
 	print(message)
+
+def feature_vector_create(clf_name, tweets, word_vector):
+	# 建立multiprocessing的pool
+	# 若沒特別設定Pool(processes = ?) 則默默認為multiprocessing.cpu_count() e.g. 4 core...
+	pool = multiprocessing.Pool()
+
+	# 進行特徵向量初始化
+	vector_base, find_tag = feature_vercor_initial(clf_name, word_vector)
+
+	# 特徵向量
+	feature_vector = []
+
+	# 每筆資料的正解
+	standard_vector = []
+
+	for tweet in tweets:
+		temp_vector = pool.apply_async(vector_generate, (vector_base, find_tag, word_vector, tweet).get())
+		feature_vector.append(temp_vector['vector'])
+		standard_vector.append(temp_vector['SA'])
+
+	return {'data': feature_vector, 'standard': standard_vector}
+
+def feature_vercor_initial(clf_name, word_vector):
+	# 取得word_vector的長度
+	vector_len = len(word_vector)
+
+	# 判斷要產生哪一種的分類器 特徵向量
+	if clf_name == 'nbc':
+		fvec = vector_initial_nbc(vector_len)
+		find_tag = True
+	elif clf_name == 'svm':
+		fvec = vector_initial_svm(vector_len)
+		find_tag = 1
+	# 回傳特徵向量基底與替換符號
+	return fvec, find_tag
+
+def vector_initial_nbc(vlength):
+	# 返回與word vector一樣長的Fasle特徵
+	return [Fasle] * vlength
+
+def vector_initial_svm(vlength):
+	# 返回與word vector一樣長的0特徵
+	return [0] * vlength
+
+def vector_generate(temp_vector, find_tag, word_vector, tweet):
+	tdict = {}
+	temp = temp_vector
+	for word in tweet.Feature:
+		for k, v in enumerate(word_vector):
+			if v == word:
+				temp[k] = find_tag
+	tdict['vector'] = temp
+	tdict['SA'] = tweet.SA
+	return tdict
+
+
+
+
+
