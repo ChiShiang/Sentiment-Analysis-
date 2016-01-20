@@ -18,22 +18,13 @@ class Classifier(object):
 		svm_clf = svm.SVC(kernel = 'rbf', gamma = s_gamma, C = s_C).fit(training_data.X, training_data.Y)
 		
 		# 將訓練好的classifier model輸出 
-		joblib.dump(svm_clf, './model/svm_clf.pkl')
-		
-		return svm_clf
+		joblib.dump(svm_clf, './model/svm_clf.pkl')	
+		setattr("svm_clf", svm_clf)
 
-	def svm_trainModel_test(self, model, data):
-		if type(model) is str:
-			# 讀取外部以訓練好的分類氣
-			svm_clf = joblib.load(model_pkl)
-		else:
-			# 讀取已經訓練好的分類器模型
-			svm_clf = model
-
-		# 載入testing data進行預測
-		testing_result = svm_clf.predict(data)
-		
-		return testing_result
+	def load_svm_clf(self, model):
+		# 讀取外部以訓練好的分類器
+		svm_clf = joblib.load(model_pkl)
+		setattr('svm_clf', svm_clf)
 
 	def nbc_process_train(self, training_data):
 		# training_data 為tweet元件，因此可以從Feature 與 SA取得你的特徵與正確答案
@@ -43,18 +34,11 @@ class Classifier(object):
 		with open("./model/nbc_clf", 'wb') as nbc_clf_file:
 			pickle.dump(nbc_clf, nbc_clf_file)
 
-		return nbc_clf
+		setattr("nbc_clf", nbc_clf)
 		
-	def nbc_trainModel_test(self, model, data):
-		if type(model) is str:
-			# 讀取外部以訓練好的分類氣
-			with open(model, 'rb') as clf_file:
-				nbc_clf = pickle.load(clf_file)
-		else:
-			# 讀取已經訓練好的分類器模型
-			nbc_clf = model
-
-		# 載入testing data進行預測
-		testing_result = nbc_clf.prob_classify_many([feature for feature, sa in data])
+	def load_nbc_clf(self, model, data):
+		# 讀取外部以訓練好的分類氣	
+		with open(model, 'rb') as clf_file:
+			nbc_clf = pickle.load(clf_file)
 		
-		return testing_result 
+		setattr('nbc_clf', nbc_clf)
