@@ -1,6 +1,7 @@
-from feature_extraction import FeatureExtractModule as FEM
-from processing import * 
-from training_testing_gen import * 
+from bin.feature_extraction import FeatureExtractModule as FEM
+from bin.processing import * 
+from bin.training_testing_gen import * 
+from bin.classifier import Classifier as clf
 
 if __name__ == "__main__":
 	try:
@@ -15,6 +16,9 @@ if __name__ == "__main__":
 
 		# 建立特徵擷取模組以及指定擷取函式
 		FE_module = FEM()
+
+		# 建立分類器
+		CLF_model = clf()
 
 		# 你的檔案中務必將你的tweet csv file中的tweet欄位設定為Content
 		# Tweets_box屬性會包含你所設定的欄位資訊
@@ -34,7 +38,22 @@ if __name__ == "__main__":
 		feature_base = word_vector_base(training_tweets, filter_range = 5)
 		logfile(message = "word vector base generated!")
 
+		# 訓練分類器並獲取訓練後的model
+		CLF_model.svm_process_train(training_data)
+		logfile(message = "SVM with RBF kernel training has been completed!")
+
+		CLF_model.nbc_process_train(training_data)
+		logfile(message = "NB Classifier training has been completed!")
+
+		# 測試分類器insample (training data) 與 outsample (testing data)
+		insample_result = CLF_model.svm_clf.predict(training_data)
+		logfile(message = "Insample testing has been completed!")
+
+		outsample_result = CLF_model.svm_clf.predict(testing_data)
+		logfile(message = "Outsample testing has been completed!")
+
 		logfile(message = "Finish")
+
 	except Exception, e:
 		logfile(message = e)
 
