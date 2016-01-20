@@ -13,9 +13,9 @@ class Classifier(object):
 	def __init__(self):
 		super(Classifier, self).__init__()
 		
-	def svm_process_train(self, training_data):
+	def svm_process_train(self, training_data, s_gamma = 0.10000000001, s_C = 1.0):
 		# training_data 為tweet元件，因此可以從Feature 與 SA取得你的特徵與正確答案
-		svm_clf = svm.SVC(kernel = 'rbf', gamma = 0.10001, C = 1.0).fit(training_data.X, training_data.Y)
+		svm_clf = svm.SVC(kernel = 'rbf', gamma = s_gamma, C = s_C).fit(training_data.X, training_data.Y)
 		
 		# 將訓練好的classifier model輸出 
 		joblib.dump(svm_clf, './model/svm_clf.pkl')
@@ -34,7 +34,6 @@ class Classifier(object):
 		testing_result = svm_clf.predict(data)
 		
 		return testing_result
-
 
 	def nbc_process_train(self, training_data):
 		# training_data 為tweet元件，因此可以從Feature 與 SA取得你的特徵與正確答案
