@@ -16,7 +16,10 @@ class Classifier(object):
 	def svm_process_train(self, training_data):
 		# training_data 為tweet元件，因此可以從Feature 與 SA取得你的特徵與正確答案
 		svm_clf = svm.SVC(kernel = 'rbf', gamma = 0.10001, C = 1.0).fit(training_data.X, training_data.Y)
+		
+		# 將訓練好的classifier model輸出 
 		joblib.dump(svm_clf, './model/svm_clf.pkl')
+		
 		return svm_clf
 
 	def svm_trainModel_test(self, model, data):
@@ -35,6 +38,13 @@ class Classifier(object):
 
 	def nbc_process_train(self, training_data):
 		# training_data 為tweet元件，因此可以從Feature 與 SA取得你的特徵與正確答案
+		nbc_clf = nbc.train(training_data)
+		
+		# 將訓練好的classifier model輸出 
+		with open("./model/nbc_clf", 'wb') as nbc_clf_file:
+			pickle.dump(nbc_clf, nbc_clf_file)
+
+		return nbc_clf
 		
 	def nbc_trainModel_test(self, model, data):
 		if type(model) is str:
