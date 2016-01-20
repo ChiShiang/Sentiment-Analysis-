@@ -1,3 +1,5 @@
+import pickle
+
 # scikit learn
 from sklearn import svm
 from sklearn.externals import joblib
