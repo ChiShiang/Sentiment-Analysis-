@@ -16,7 +16,7 @@ class Classifier(object):
 	def svm_process_train(self, training_data, word_vector_base):
 		# training_data 為tweet元件，因此可以從Feature 與 SA取得你的特徵與正確答案
 
-	def svm_trainModel_test(self, model, testing_data):
+	def svm_trainModel_test(self, model, data):
 		if type(model) is str:
 			# 讀取外部以訓練好的分類氣
 			svm_clf = joblib.load(model_pkl)
@@ -25,7 +25,7 @@ class Classifier(object):
 			svm_clf = model
 
 		# 載入testing data進行預測
-		testing_result = svm_clf.predict(testing_data)
+		testing_result = svm_clf.predict(data)
 		
 		return testing_result
 
@@ -33,7 +33,7 @@ class Classifier(object):
 	def nbc_process_train(self, training_data, word_vector_base):
 		# training_data 為tweet元件，因此可以從Feature 與 SA取得你的特徵與正確答案
 		
-	def nbc_trainModel_test(self, model, testing_data):
+	def nbc_trainModel_test(self, model, data):
 		if type(model) is str:
 			# 讀取外部以訓練好的分類氣
 			with open(model, 'rb') as clf_file:
@@ -43,6 +43,6 @@ class Classifier(object):
 			nbc_clf = model
 
 		# 載入testing data進行預測
-		testing_result = nbc_clf.prob_classify_many([feature for feature, sa in testing_data])
+		testing_result = nbc_clf.prob_classify_many([feature for feature, sa in data])
 		
 		return testing_result 
