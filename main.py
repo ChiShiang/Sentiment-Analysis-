@@ -1,5 +1,5 @@
 from feature_extraction import FeatureExtractModule as FEM
-from preprocessing import * 
+from processing import * 
 from training_testing_gen import * 
 
 if __name__ == "__main__":
@@ -23,14 +23,17 @@ if __name__ == "__main__":
 	# 		tweets_box[0].SA		 --> 1
 	# 		tweets_box[0].Feature 	 --> ["xxx",...]
 	tweets_box = preprocess(tweets_path, delmitier, col_tag, FE_module.Unigram_FEF)
+	logfile(message = "tweets preprocessing has been completed! ...")
 
 	# 製作訓練資料集與測試資料集 
 	training_tweets, testing_tweets = training_testing_gen(tweets_box, probability_train = 0.7)
+	logfile(message = "training and testing set generated! ...")
 
 	# 從Tweet Feature中，統計出適用的字，作為特徵向量
-	feature_statistic(training_tweets)
+	feature_base = word_vector_base(training_tweets, filter_range = 5)
+	logfile(message = "word vector base generated!")
 
-	print("Finish")
+	logfile(message = "Finish")
 
 
 
