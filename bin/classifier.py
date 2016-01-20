@@ -13,8 +13,11 @@ class Classifier(object):
 	def __init__(self):
 		super(Classifier, self).__init__()
 		
-	def svm_process_train(self, training_data, word_vector_base):
+	def svm_process_train(self, training_data):
 		# training_data 為tweet元件，因此可以從Feature 與 SA取得你的特徵與正確答案
+		svm_clf = svm.SVC(kernel = 'rbf', gamma = 0.10001, C = 1.0).fit(training_data.X, training_data.Y)
+		joblib.dump(svm_clf, './model/svm_clf.pkl')
+		return svm_clf
 
 	def svm_trainModel_test(self, model, data):
 		if type(model) is str:
@@ -30,7 +33,7 @@ class Classifier(object):
 		return testing_result
 
 
-	def nbc_process_train(self, training_data, word_vector_base):
+	def nbc_process_train(self, training_data):
 		# training_data 為tweet元件，因此可以從Feature 與 SA取得你的特徵與正確答案
 		
 	def nbc_trainModel_test(self, model, data):
