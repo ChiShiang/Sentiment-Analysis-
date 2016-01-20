@@ -16,6 +16,7 @@ def training_testing_gen(tweets, probability_train):
 	return training_set, testing_set
 
 def training_seed(index, prob_train):
+	# 用來固定產生亂數的規律性
 	r.seed(index%10, 10)
 	if r.random() < prob_train:
 		return True
