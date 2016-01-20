@@ -2,25 +2,6 @@ from feature_extraction import FeatureExtractModule as FEM
 from preprocessing import * 
 from training_testing_gen import * 
 
-def feature_statistic(tweets):
-	tdict = {}
-	class_count_all = {'0':0, '1':0, '-1':0}
-	for tweet in tweets:
-		class_count_all[tweet.SA] += 1
-		for word in tweet.Feature:
-			if word not in tdict.keys():
-				class_count = {'0':0, '1':0, '-1':0, "count": 1}
-				class_count[tweet.SA] += 1
-				tdict[word] = class_count
-			else:
-				tdict[word]['count'] += 1
-				tdict[word][tweet.SA] += 1 
-	with open("./test_analysis.txt", 'w') as tempfile:
-		tempfile.write("{}:{}:{}:{}:{}\n".format('',len(tweets), class_count_all['0'], class_count_all['1'], class_count_all['-1']))
-		for k, v in tdict.items():
-			tempfile.write("{}:{}:{}:{}:{}\n".format(k, v['count'], v['0'], v['1'], v['-1']))
-
-
 if __name__ == "__main__":
 	# Tweet 位置
 	tweets_path = "./tweets.txt"
