@@ -91,6 +91,8 @@ def feature_vector_create(clf_name, tweets, word_vector):
 		temp_vector = pool.apply_async(vector_generate, (vector_base, find_tag, word_vector, tweet).get())
 		feature_vector.append(temp_vector['vector'])
 		standard_vector.append(temp_vector['SA'])
+	pool.close()
+	pool.join()
 
 	return {'data': feature_vector, 'standard': standard_vector}
 
