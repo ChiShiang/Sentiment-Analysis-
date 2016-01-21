@@ -34,12 +34,20 @@ if __name__ == "__main__":
 		training_tweets, testing_tweets = training_testing_gen(tweets_box, probability_train = 0.7)
 		logfile(message = "training and testing set generated! ...")
 
-		# 從Tweet Feature中，統計出適用的字，作為特徵向量
+		# 從Tweet Feature中，統計出適用的字，作為特徵向量基底
 		feature_base = word_vector_base(training_tweets, filter_range = 5)
 		logfile(message = "word vector base generated!")
 
+		# 從training data產生特徵向量
+		training_data_svm = feature_vector_create('svm', training_tweets, feature_base)
+		training_data_nbc = feature_vector_create('nbc', training_tweets, feature_base)
+
+		# testing data產生特徵向量
+		training_data_svm = feature_vector_create('svm', testing_tweets, feature_base)
+		training_data_nbc = feature_vector_create('nbc', testing_tweets, feature_base)
+
 		# 訓練分類器並獲取訓練後的model
-		CLF_model.svm_process_train(training_data)
+		CLF_model.svm_process_train(training_data_svm)
 		logfile(message = "SVM with RBF kernel training has been completed!")
 
 		CLF_model.nbc_process_train(training_data)
