@@ -6,13 +6,16 @@ from bin.classifier import Classifier as clf
 if __name__ == "__main__":
 	try:
 		# Tweet 位置
-		tweets_path = "./tweets.txt"
-		
+		tweets_path = "./src/tweets.txt"
+		logfile(message = "Loading tweets file! ...")
+
+
 		# 資料分割符號
 		delmitier = "|"
 		
 		# 要用欄位資訊
 		col_tag = ['Subject', 'Content', 'SA']
+		logfile(message = "Setting the column title in tweets file! ...")
 
 		# 建立特徵擷取模組以及指定擷取函式
 		FE_module = FEM()
@@ -41,28 +44,36 @@ if __name__ == "__main__":
 		# 從training data產生特徵向量
 		training_data_svm = feature_vector_create('svm', training_tweets, feature_base)
 		training_data_nbc = feature_vector_create('nbc', training_tweets, feature_base)
+		logfile(message = "SVM and NBC training data has been generated!")
 
 		# testing data產生特徵向量
-		training_data_svm = feature_vector_create('svm', testing_tweets, feature_base)
-		training_data_nbc = feature_vector_create('nbc', testing_tweets, feature_base)
+		testing_data_svm = feature_vector_create('svm', testing_tweets, feature_base)
+		testing_data_nbc = feature_vector_create('nbc', testing_tweets, feature_base)
+		logfile(message = "SVM and NBC testing data has been generated!")
 
 		# 訓練分類器並獲取訓練後的model
 		CLF_model.svm_process_train(training_data_svm)
 		logfile(message = "SVM with RBF kernel training has been completed!")
 
-		CLF_model.nbc_process_train(training_data)
+		CLF_model.nbc_process_train(training_data_nbc)
 		logfile(message = "NB Classifier training has been completed!")
 
 		# 測試分類器insample (training data) 與 outsample (testing data)
-		insample_result = CLF_model.svm_clf.predict(training_data)
-		logfile(message = "Insample testing has been completed!")
+		insample_result_svm = CLF_model.svm_clf.predict(training_data_svm['data'])
+		logfile(message = "SVM Insample testing has been completed!")
 
-		outsample_result = CLF_model.svm_clf.predict(testing_data)
-		logfile(message = "Outsample testing has been completed!")
+		insample_result_nbc = CLF_model.nbc_clf.predict(training_data_nbc['data'])
+		logfile(message = "NBC Insample testing has been completed!")
 
-		logfile(message = "Finish")
+		outsample_result_svm = CLF_model.svm_clf.predict(testing_data_svm['data'])
+		logfile(message = "SVM Outsample testing has been completed!")
 
-	except Exception, e:
+		outsample_result_nbc = CLF_model.nbc_clf.predict(testing_data_nbc['data'])
+		logfile(message = "NBC Outsample testing has been completed!")
+
+		logfile(message = "All processing has been finish!")
+
+	except Exception as e:
 		logfile(message = e)
 
 
