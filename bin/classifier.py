@@ -41,4 +41,3 @@ class Classifier(object):
 		# 讀取外部以訓練好的分類器
 		self.nbc_clf = joblib.load(model)
 
-		
