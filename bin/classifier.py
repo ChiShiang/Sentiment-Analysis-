@@ -4,10 +4,7 @@ import pickle
 from sklearn import svm
 from sklearn.naive_bayes import GaussianNB as gnbc
 from sklearn.externals import joblib
-
-# nltk package
-from nltk.classify import NaiveBayesClassifier as nbc
-import nltk.classify.util
+from sklearn.metrics import classification_report as clf_report
 
 class Classifier(object):
 	"""docstring for Classifier"""
@@ -41,3 +38,8 @@ class Classifier(object):
 		# 讀取外部以訓練好的分類器
 		self.nbc_clf = joblib.load(model)
 
+	# ===========================Classification Infomation====================
+	def classifier_report(self, sample_type, standard_y, predict_y):
+		# 評估分類器訓練結果
+		print("===================={} Sample Result ====================".format(sample_type))
+		print(clf_report(standard_y, predict_y))
