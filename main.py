@@ -71,6 +71,14 @@ if __name__ == "__main__":
 		outsample_result_nbc = CLF_model.nbc_clf.predict(testing_data_nbc['data'])
 		logfile(message = "NBC Outsample testing has been completed!")
 
+		logfile(message = "Show the classifier result!")
+
+		CLF_model.classifier_report("SVM_IN", training_data_svm['standard'], insample_result_svm)
+		CLF_model.classifier_report("NBC_IN", training_data_nbc['standard'], insample_result_nbc)
+
+		CLF_model.classifier_report("SVM_OUT", testing_data_svm['standard'], outsample_result_svm)
+		CLF_model.classifier_report("NBC_OUT", testing_data_nbc['standard'], outsample_result_nbc)
+
 		logfile(message = "All processing has been finish!")
 
 	except Exception as e:
